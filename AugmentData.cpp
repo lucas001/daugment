@@ -30,6 +30,7 @@ void AugmentData::applyGaussianBlur(Mat& src, int numKernels){
     if(numKernels > src.rows) numKernels = src.rows;
     if(numKernels > src.cols) numKernels = src.cols;
     Mat dst;
+    
     for (int i=1; i<numKernels; i=i+2)
     { 
         GaussianBlur( src, dst, Size( i, i ), 2, 2 );  
