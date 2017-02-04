@@ -29,7 +29,7 @@ void AugmentData::resizeImage(Mat& src, int width, int height, bool keepSize){
 void AugmentData::applyGaussianBlur(Mat& src, int numKernels){
     if(numKernels > src.rows) numKernels = src.rows;
     if(numKernels > src.cols) numKernels = src.cols;
-    Mat dst;
+    Mat dst = Mat::zeros(src.size(), src.type());
     
     for (int i=1; i<numKernels; i=i+2)
     { 
@@ -41,8 +41,9 @@ void AugmentData::applyGaussianBlur(Mat& src, int numKernels){
 }
 
 void AugmentData::invertImage(Mat& src){
-    Mat dst;               // dst must be a different Mat
+    Mat dst = Mat::zeros(src.size(), src.type());
     flip(src, dst, 1); 
+    cout << dst.size() << endl;
     src = dst;
 }
 
@@ -51,13 +52,16 @@ void AugmentData::scaleImage(Mat& src, float scale){
     int height = src.rows*scale;
 
     
-    Rect cropArea((width-src.cols)/2, (height-src.rows)/2, src.cols, src.rows);
+    Rect cropArea(fabs(width-src.cols)/2, fabs(height-src.rows)/2, src.cols, src.rows);
 
+    cout << width << endl;
+    cout << height << endl;
     resizeImage(src,width,height,true);
 
-    Mat dst(src,cropArea);
+    //dst.copyTo(src);
+    //Mat dst(src,cropArea);
 
-    src = dst;
+    //src = dst;
 }
 
 void AugmentData::dropoutChannels(Mat& src,float perc, bool channels){
@@ -85,7 +89,7 @@ void AugmentData::addGaussianNoise(Mat& src, float meanSc, float stdDevSc, bool 
     Scalar mean(meanSc);
     Scalar stdDev(stdDevSc);
     
-    randn(noise,mean,stdDev);
+    randn(noise,meanSc,stdDevSc);
 
     src += noise;
 }
@@ -193,4 +197,16 @@ void AugmentData::colorIntensification(Mat& src, Vec3f unitaryChange){
     }
 
     src = out;
+}
+
+void AugmentData::normalizeImage(Mat& src, float minNorm, float maxNorm){
+    Mat out = Mat::zeros(src.size(),src.type());
+    
+    normalize(src, out, minNorm, maxNorm, NORM_MINMAX, src.type());
+
+    src = out;
+}
+
+void AugmentData::laplaceTransform(Mat& src){
+
 }

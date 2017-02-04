@@ -6,16 +6,20 @@ HandleData::HandleData(){
     maxPercTrans = 30;
     maxNumKGauss = 100;
     minNumKGauss = 20;
-    marginScale = 80;
+    marginScale = 70;
     devScale = 40;
-    gaussMaxMean = 4;
-    gaussMaxStd = 4;
-    maxDevBrightness = 1;
-    maxContrast = 2;
+    gaussMaxMean = 100;
+    gaussMaxStd = 100;
+    marginDropout = 40;
+    devDropout = 10;
+    maxDevBrightness = 50;
+    maxContrast = 1;
+    marginContrast = 50;
     maxAngRot = 25;
     maxShear = 0.2;
     maxIntensColor = 0.5;
-
+    devNormalization = 40;
+    
     readSource("./");
 }
 
@@ -32,14 +36,26 @@ void HandleData::readSource(string path){
 
     int index = rand()%data.size();
     
-    Mat src = data.at(index);
+    Mat src;
+    data.at(index).copyTo(src);
     selectMethod(0,src);
     imshow("SHOW",src);
+    imshow("SHOW 2",data.at(index));
     waitKey(0);
 }
 
 void HandleData::randomAugmenting(){
+    
     for(int i = 0; i < data.size(); i++){
+        vector<int> listAppliedTech;
+        int numberTransform = rand()%12;
+        for(int j = 0; j < numberTransform; j++){
+            
+        }
+        if (find(listAppliedTech.begin(), listAppliedTech.end(), numberTransform) != listAppliedTech.end()){
+
+        }
+        listAppliedTech.push_back(numberTransform);
 
     }
 }
@@ -50,7 +66,9 @@ void HandleData::selectMethod(int index,Mat& src){
             float numKernels = (int)(rand()%maxNumKGauss);
             if(numKernels < minNumKGauss) numKernels = minNumKGauss;
 
-            augData.applyGaussianBlur(src, numKernels);
+            adGaussianBlur gaussBlur(minNumKGauss, maxNumKGauss, 2, 2);
+            gaussBlur.apply(src);
+            //augData.applyGaussianBlur(src, numKernels);
         }break;
         case 1:{
             augData.invertImage(src);
@@ -60,16 +78,19 @@ void HandleData::selectMethod(int index,Mat& src){
             augData.scaleImage(src, scale);
         }break;
         case 3:{
-            float meanSc = (float)(rand()%gaussMaxMean*100)/100.f;
-            float stdDevSc = (float)(rand()%gaussMaxStd*100)/100.f;
+            float meanSc = (float)(rand()%(gaussMaxMean*100))/100.f;
+            float stdDevSc = (float)(rand()%(gaussMaxStd*100))/100.f;
             
             bool doChannels = (rand()%100 < 50) ? true : false;
             if(src.channels() == 1) doChannels = false;
 
-            augData.addGaussianNoise(src, meanSc, stdDevSc, doChannels);
+            cout << meanSc << endl;
+            cout << stdDevSc << endl;
+
+            augData.addGaussianNoise(src, meanSc, stdDevSc, true);
         }break;
         case 4:{
-            float perc = ((float)(rand()%50)+50)/100.f;
+            float perc = ((float)(rand()%(devDropout)+marginDropout))/100.f;
             bool doChannels = (rand()%100 < 50) ? true : false;
             if(src.channels() == 1) doChannels = false;
 
@@ -78,7 +99,7 @@ void HandleData::selectMethod(int index,Mat& src){
         case 5:{
             int brightness = rand()%maxDevBrightness;
             brightness -= rand()%maxDevBrightness;
-            float contrast = (float)(rand()%maxContrast*100)/100.f;
+            float contrast = (float)(rand()%(maxContrast*100)+marginContrast)/100.f;
 
             augData.addContBright(src, brightness, contrast);
         }break;
@@ -99,19 +120,25 @@ void HandleData::selectMethod(int index,Mat& src){
             augData.rotate(src, angle);
         }break;
         case 9:{
-            float shearX = (float)(rand()%maxShear*100.f)/100.f;
-            float shearY = (float)(rand()%maxShear*100.f)/100.f;
-            
+            float shearX = (float)(rand()%(int)(maxShear*100))/100.f;
+            float shearY = (float)(rand()%(int)(maxShear*100))/100.f;
+
             augData.shearImate(src, shearX, shearY);
         }break;
         case 10:{
             float unit[3];
             for(int i = 0; i < 3; i++){
-                unit[i] = (float)(rand()%maxIntensColor*100.f)/100.f;
+                unit[i] = (float)(rand()%(int)(maxIntensColor*100.f))/100.f;
             }
             Vec3f unitaryChange(unit[0],unit[1],unit[2]);
 
             augData.colorIntensification(src, unitaryChange);
+        }break;
+        case 11:{
+            float minNorm = (float)(rand()%(255-devNormalization));
+            float maxNorm = minNorm + devNormalization + (float)(rand()%(int)(minNorm + devNormalization));
+
+            augData.normalizeImage(src, minNorm, maxNorm);
         }break;
     }
 }

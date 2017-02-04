@@ -1,7 +1,7 @@
 #ifndef AUGMENT_DATA_H
 #define AUGMENT_DATA_H
 
-#include "DataHeader.h"
+#include "adDataHeader.h"
 
 class AugmentData{
 private:
@@ -19,6 +19,8 @@ public:
     void rotate(Mat& src, float angle);
     void shearImate(Mat& src, float shearX, float shearY);
     void colorIntensification(Mat& src, Vec3f unitaryChange);
+    void normalizeImage(Mat& src, float minNorm, float maxNorm);
+    void laplaceTransform(Mat& src);
 };
 
 #endif

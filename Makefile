@@ -1,6 +1,6 @@
 CC = g++ -std=c++11
 
-INCLUDES = -I.
+INCLUDES = -I. -IDataAug/ 
 LIBRARIES = -pthread $(filter-out -lippicv, $(shell pkg-config --libs opencv))
 
 SRC := $(shell find ./ -name '*.cpp')
