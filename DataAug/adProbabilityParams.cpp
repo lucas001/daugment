@@ -19,8 +19,9 @@ float adProbabilityParams::poissonDistribution(int mean){
 float adProbabilityParams::uniformDistribution(int beginInter, int endInter){
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(beginInter,endInter);
-
+    usleep(100);
     float number = distribution(generator);
+    cout << "n: " << number << endl;
     return number/(float)endInter;
 }
 

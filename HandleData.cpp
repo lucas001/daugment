@@ -66,7 +66,7 @@ void HandleData::selectMethod(int index,Mat& src){
             float numKernels = (int)(rand()%maxNumKGauss);
             if(numKernels < minNumKGauss) numKernels = minNumKGauss;
 
-            adGaussianBlur gaussBlur(minNumKGauss, maxNumKGauss, 2, 2);
+            adGaussianBlur gaussBlur;
             gaussBlur.apply(src);
             //augData.applyGaussianBlur(src, numKernels);
         }break;
