@@ -16,14 +16,11 @@ adGaussianBlur(0, minNumKG, maxNumKG, sigX, sigY, maxDevSig){
 }
 
 void adGaussianBlur::randomInit(){
-    this->numKernels = (int)(rand()%this->maxNumKGauss);
+    this->numKernels = probParams.uniformDistribution(0, maxNumKGauss);
     if(numKernels < minNumKGauss) this->numKernels = minNumKGauss;
     
-    sigmaX = probParams.uniformDistribution(0,100)*maxDevSigma;
-    sigmaY = probParams.uniformDistribution(0,100)*maxDevSigma;
-    cout << probParams.uniformDistribution(0,100) << endl;
-    cout << sigmaY << endl;
-    
+    sigmaX = probParams.uniformDistribution(0,maxDevSigma);
+    sigmaY = probParams.uniformDistribution(0,maxDevSigma);
 }
 
 void adGaussianBlur::apply(Mat& src){
@@ -37,4 +34,28 @@ void adGaussianBlur::apply(Mat& src){
     }
 
     dst.copyTo(src);
+}
+
+void adGaussianBlur::setMaxKGauss(int maxNumKGauss){
+    this->maxNumKGauss = maxNumKGauss;
+}
+
+void adGaussianBlur::setMinKGauss(int minNumKGauss){
+    this->minNumKGauss = minNumKGauss;
+}
+
+void adGaussianBlur::setNumKernels(int numKernels){
+    this->numKernels = numKernels;
+}
+
+void adGaussianBlur::setSigmaX(float sigmaX){
+    this->sigmaX = sigmaX;
+}
+
+void adGaussianBlur::setSigmaY(float sigmaY){
+    this->sigmaY = sigmaY;
+}
+
+void adGaussianBlur::setMaxDevSigma(float maxDevSigma){
+    this->maxDevSigma = maxDevSigma;
 }

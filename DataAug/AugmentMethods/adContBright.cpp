@@ -1,11 +1,17 @@
 #include "AugmentMethods/adContBright.h"
     
-adContBright::adContBright(int brightness, double contrast, int maxDevBrightness, int maxContrast, float marginContrast){
+adContBright::adContBright(int brightness, double contrast, int minBrightness, int maxBrightness, float maxContrast, float minContrast){
     this->brightness = brightness;
     this->contrast = contrast;
-    this->maxDevBrightness = maxDevBrightness;
+    this->maxBrightness = maxBrightness;
+    this->minBrightness = minBrightness;
     this->maxContrast = maxContrast;
-    this->marginContrast = marginContrast;
+    this->minContrast = minContrast;
+}
+
+adContBright::adContBright(int minBrightness, int maxBrightness, float maxContrast, float minContrast):
+adContBright(0,0,minBrightness,maxBrightness,maxContrast, minContrast){
+    randomInit();
 }
 
 void adContBright::apply(Mat& src){
@@ -25,9 +31,8 @@ void adContBright::apply(Mat& src){
 }
 
 void adContBright::randomInit(){
-    brightness = rand()%maxDevBrightness;
-    brightness -= rand()%maxDevBrightness;
-    contrast = (float)(rand()%(maxContrast*100)+marginContrast)/100.f;
+    brightness = probParams.uniformDistribution(minBrightness,maxBrightness);
+    contrast = probParams.uniformDistribution(minContrast,maxContrast);
 }
 
 void adContBright::setBrightness(int brightness){
@@ -38,14 +43,18 @@ void adContBright::setContrast(float contrast){
     this->contrast = contrast;
 }
 
-void adContBright::setMaxDevBrightness(int maxDevBrightness){
-    this->maxDevBrightness = maxDevBrightness;
+void adContBright::setMaxBrightness(int maxBrightness){
+    this->maxBrightness = maxBrightness;
 }
 
-void adContBright::setMaxContrast(int maxContrast){
+void adContBright::setMinBrightness(int minBrightness){
+    this->minBrightness = minBrightness;
+}
+
+void adContBright::setMaxContrast(float maxContrast){
     this->maxContrast = maxContrast;
 }
 
-void adContBright::setMarginContrast(float marginContrast){
-    this->marginContrast = marginContrast;
+void adContBright::setMinContrast(float minContrast){
+    this->minContrast = minContrast;
 }

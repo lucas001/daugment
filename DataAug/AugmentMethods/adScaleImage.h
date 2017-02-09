@@ -3,19 +3,22 @@
 
 #include "AugmentMethods/adAugmentMethod.h"
 #include "AugmentMethods/adResizeImage.h"
+#include "adProbabilityParams.h"
 
 class adResizeImage;
 
 class adScaleImage : public adAugmentMethod{
 private:
     float scale;
-    int devScale;
-    int marginScale;
+    float devScale;
+    float marginScale;
 
     adResizeImage adResIm;
+    adProbabilityParams probParams;
 
 public:
-    adScaleImage(float scale, int devScale, int marginScale);
+    adScaleImage(float devScale = 0.4, float marginScale = 0.8);
+    adScaleImage(float scale, float devScale = 0.4, float marginScale = 0.8);
     void apply(Mat& src);
     void randomInit();
 

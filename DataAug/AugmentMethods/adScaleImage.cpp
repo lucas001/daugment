@@ -1,9 +1,14 @@
 #include "AugmentMethods/adScaleImage.h"
 
-adScaleImage::adScaleImage(float scale, int devScale, int marginScale){
+adScaleImage::adScaleImage(float scale, float devScale, float marginScale){
     this->scale = scale;
     this->devScale = devScale;
     this->marginScale = marginScale;
+}
+
+adScaleImage::adScaleImage(float devScale, float marginScale) : 
+adScaleImage(1.0, devScale, marginScale){
+    randomInit();
 }
 
 void adScaleImage::apply(Mat& src){
@@ -20,7 +25,7 @@ void adScaleImage::apply(Mat& src){
 }
 
 void adScaleImage::randomInit(){
-    this->scale = ((float)(rand()%devScale)+marginScale)/100.f;
+    this->scale = probParams.uniformDistribution(0,devScale)+marginScale;
 }
 
 void adScaleImage::setScale(float scale){

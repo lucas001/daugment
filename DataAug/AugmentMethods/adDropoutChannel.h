@@ -8,25 +8,26 @@ class adDropoutChannel : public adAugmentMethod{
 private:
     float perc;
     bool channels;
-    int devDropout;
-    float marginDropout;
+    float minPercDrop;
+    float maxPercDrop;
 
+    adProbabilityParams probParams;
 public:
-    adDropoutChannel(){};
-    adDropoutChannel(float perc, bool channels, int devDropout, float marginDropout);
+    adDropoutChannel(float minPercDrop = 0.3, float maxPercDrop = 0.7);
+    adDropoutChannel(float perc, bool channels, float minPercDrop = 0.3, float maxPercDrop = 0.7);
 
     void randomInit();
     void apply(Mat& src);
 
     void setPerc(float perc);
     void setChannels(bool channels);
-    void setMarginDropout(float margin);
-    void setDevDropout(int dev);
+    void setMaxPercDrop(float maxPercDrop);
+    void setMinPercDrop(float minPercDrop);
 
     float getPerc(){ return perc; }
     bool getChannels(){ return channels; }
-    float getMarginDropout() { return marginDropout; };
-    int getDevDropout(){ return devDropout; };
+    float getMaxPercDrop() { return maxPercDrop; }
+    int getMinPercDrop(){ return minPercDrop; }
 };
 
 #endif

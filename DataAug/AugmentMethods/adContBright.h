@@ -7,29 +7,34 @@
 class adContBright : public adAugmentMethod{
 private:
     int brightness;
-    float contrast; 
-    int maxDevBrightness;
-    int maxContrast; 
-    float marginContrast;
+    float contrast;
+    int minBrightness; 
+    int maxBrightness;
+    float maxContrast; 
+    float minContrast;
+
+    adProbabilityParams probParams;
 
 public:
-    adContBright(){};
-    adContBright(int brightness, double contrast, int maxDevBrightness, int maxContrast, float marginContrast);
+    adContBright(int minBrightness = 50, int maxBrightness = 150, float maxContrast = 1.5, float minContrast = 0.5);
+    adContBright(int brightness, double contrast, int minBrightness = 50, int maxBrightness = 150, float maxContrast = 150, float minContrast = 50);
 
     void apply(Mat& src);
     void randomInit();
 
     void setBrightness(int brightness);
     void setContrast(float contrast);
-    void setMaxDevBrightness(int maxDevBrightness);
-    void setMaxContrast(int maxContrast);
-    void setMarginContrast(float marginContrast);
+    void setMaxBrightness(int maxBrightness);
+    void setMinBrightness(int minBrightness);
+    void setMaxContrast(float maxContrast);
+    void setMinContrast(float minContrast);
 
-    int setBrightness(){ return brightness; };
-    float setContrast(){ return contrast; };
-    int setMaxDevBrightness(){ return maxDevBrightness; };
-    int setMaxContrast(){ return maxContrast; };
-    float setMarginContrast(){ return marginContrast; };
+    int getBrightness(){ return brightness; }
+    float getContrast(){ return contrast; }
+    int getMaxBrightness(){ return maxBrightness; }
+    int getMinBrightness(){ return minBrightness; }
+    float getMaxContrast(){ return maxContrast; }
+    float getMinContrast(){ return minContrast; }
 };
 
 #endif

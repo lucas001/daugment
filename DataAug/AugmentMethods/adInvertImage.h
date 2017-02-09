@@ -2,12 +2,16 @@
 #define INVERT_IMAGE_H
 
 #include "AugmentMethods/adAugmentMethod.h"
+#include "adProbabilityParams.h"
 
 class adInvertImage : public adAugmentMethod{
 private:
     bool flipLr;
     bool flipUd;
+
+    adProbabilityParams probParams;
 public:
+    adInvertImage();
     adInvertImage(bool flipLr, bool flipUd);
     void apply(Mat& src);
     void randomInit();

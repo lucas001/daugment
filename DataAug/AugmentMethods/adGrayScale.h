@@ -8,8 +8,9 @@ class adGrayScale : public adAugmentMethod{
 private:
     float scale; 
 
+    adProbabilityParams probParams;
 public:
-    adGrayScale(){};
+    adGrayScale();
     adGrayScale(float scale);
 
     void apply(Mat& src);

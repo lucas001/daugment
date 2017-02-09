@@ -38,7 +38,7 @@ void HandleData::readSource(string path){
     
     Mat src;
     data.at(index).copyTo(src);
-    selectMethod(0,src);
+    selectMethod(5,src);
     imshow("SHOW",src);
     imshow("SHOW 2",data.at(index));
     waitKey(0);
@@ -71,11 +71,16 @@ void HandleData::selectMethod(int index,Mat& src){
             //augData.applyGaussianBlur(src, numKernels);
         }break;
         case 1:{
-            augData.invertImage(src);
+            adInvertImage invImg;
+            invImg.apply(src);
+            //augData.invertImage(src);
         }break;
         case 2:{
             float scale = ((float)(rand()%devScale)+marginScale)/100.f;
-            augData.scaleImage(src, scale);
+
+            adScaleImage scImg;
+            scImg.apply(src);
+            //augData.scaleImage(src, scale);
         }break;
         case 3:{
             float meanSc = (float)(rand()%(gaussMaxMean*100))/100.f;
@@ -84,29 +89,34 @@ void HandleData::selectMethod(int index,Mat& src){
             bool doChannels = (rand()%100 < 50) ? true : false;
             if(src.channels() == 1) doChannels = false;
 
-            cout << meanSc << endl;
-            cout << stdDevSc << endl;
-
-            augData.addGaussianNoise(src, meanSc, stdDevSc, true);
+            adGaussianNoise gaussNs;
+            gaussNs.apply(src);
+            //augData.addGaussianNoise(src, meanSc, stdDevSc, true);
         }break;
         case 4:{
             float perc = ((float)(rand()%(devDropout)+marginDropout))/100.f;
             bool doChannels = (rand()%100 < 50) ? true : false;
             if(src.channels() == 1) doChannels = false;
 
-            augData.dropoutChannels(src, perc, doChannels);
+            adDropoutChannel dropCh;
+            dropCh.apply(src);
+            //augData.dropoutChannels(src, perc, doChannels);
         }break;
         case 5:{
             int brightness = rand()%maxDevBrightness;
             brightness -= rand()%maxDevBrightness;
             float contrast = (float)(rand()%(maxContrast*100)+marginContrast)/100.f;
 
-            augData.addContBright(src, brightness, contrast);
+            adContBright coBr;
+            coBr.apply(src);
+            //augData.addContBright(src, brightness, contrast);
         }break;
         case 6:{
             float scale = (float)(rand()%100)/100.f;
-
-            augData.grayScale(src, scale);
+            
+            adGrayScale grSc;
+            grSc.apply(src);
+            //augData.grayScale(src, scale);
         }break;
         case 7:{
             float transX = src.cols*(float)(rand()%maxPercTrans)/100.f;
