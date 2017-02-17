@@ -1,25 +1,6 @@
 #include "HandleData.h"
 
 HandleData::HandleData(){
-    srand(time(NULL));
-
-    maxPercTrans = 30;
-    maxNumKGauss = 100;
-    minNumKGauss = 20;
-    marginScale = 70;
-    devScale = 40;
-    gaussMaxMean = 100;
-    gaussMaxStd = 100;
-    marginDropout = 40;
-    devDropout = 10;
-    maxDevBrightness = 50;
-    maxContrast = 1;
-    marginContrast = 50;
-    maxAngRot = 25;
-    maxShear = 0.2;
-    maxIntensColor = 0.5;
-    devNormalization = 40;
-    
     readSource("./");
 }
 
@@ -38,7 +19,7 @@ void HandleData::readSource(string path){
     
     Mat src;
     data.at(index).copyTo(src);
-    selectMethod(5,src);
+    selectMethod(12,src);
     imshow("SHOW",src);
     imshow("SHOW 2",data.at(index));
     waitKey(0);
@@ -63,92 +44,56 @@ void HandleData::randomAugmenting(){
 void HandleData::selectMethod(int index,Mat& src){
     switch(index){
         case 0:{
-            float numKernels = (int)(rand()%maxNumKGauss);
-            if(numKernels < minNumKGauss) numKernels = minNumKGauss;
-
             adGaussianBlur gaussBlur;
             gaussBlur.apply(src);
-            //augData.applyGaussianBlur(src, numKernels);
         }break;
         case 1:{
             adInvertImage invImg;
             invImg.apply(src);
-            //augData.invertImage(src);
         }break;
         case 2:{
-            float scale = ((float)(rand()%devScale)+marginScale)/100.f;
-
             adScaleImage scImg;
             scImg.apply(src);
-            //augData.scaleImage(src, scale);
         }break;
         case 3:{
-            float meanSc = (float)(rand()%(gaussMaxMean*100))/100.f;
-            float stdDevSc = (float)(rand()%(gaussMaxStd*100))/100.f;
-            
-            bool doChannels = (rand()%100 < 50) ? true : false;
-            if(src.channels() == 1) doChannels = false;
-
             adGaussianNoise gaussNs;
             gaussNs.apply(src);
-            //augData.addGaussianNoise(src, meanSc, stdDevSc, true);
         }break;
         case 4:{
-            float perc = ((float)(rand()%(devDropout)+marginDropout))/100.f;
-            bool doChannels = (rand()%100 < 50) ? true : false;
-            if(src.channels() == 1) doChannels = false;
-
             adDropoutChannel dropCh;
             dropCh.apply(src);
-            //augData.dropoutChannels(src, perc, doChannels);
         }break;
         case 5:{
-            int brightness = rand()%maxDevBrightness;
-            brightness -= rand()%maxDevBrightness;
-            float contrast = (float)(rand()%(maxContrast*100)+marginContrast)/100.f;
-
             adContBright coBr;
             coBr.apply(src);
-            //augData.addContBright(src, brightness, contrast);
         }break;
         case 6:{
-            float scale = (float)(rand()%100)/100.f;
-            
             adGrayScale grSc;
             grSc.apply(src);
-            //augData.grayScale(src, scale);
         }break;
         case 7:{
-            float transX = src.cols*(float)(rand()%maxPercTrans)/100.f;
-            float transY = src.rows*(float)(rand()%maxPercTrans)/100.f;
-            
-            augData.translate(src, transX, transY, true);
+            adTranslate trans;
+            trans.apply(src);
         }break;
         case 8:{
-            float angle = rand()%maxAngRot;
-            
-            augData.rotate(src, angle);
+            adRotate rotImg;
+            rotImg.apply(src);
         }break;
         case 9:{
-            float shearX = (float)(rand()%(int)(maxShear*100))/100.f;
-            float shearY = (float)(rand()%(int)(maxShear*100))/100.f;
-
-            augData.shearImate(src, shearX, shearY);
+            adShearImage shImg;
+            shImg.apply(src);
         }break;
         case 10:{
-            float unit[3];
-            for(int i = 0; i < 3; i++){
-                unit[i] = (float)(rand()%(int)(maxIntensColor*100.f))/100.f;
-            }
-            Vec3f unitaryChange(unit[0],unit[1],unit[2]);
-
-            augData.colorIntensification(src, unitaryChange);
+            adColorIntensification clrItImg;
+            clrItImg.apply(src);
         }break;
         case 11:{
-            float minNorm = (float)(rand()%(255-devNormalization));
-            float maxNorm = minNorm + devNormalization + (float)(rand()%(int)(minNorm + devNormalization));
-
-            augData.normalizeImage(src, minNorm, maxNorm);
+            adNormalizeImage normImg;
+            normImg.apply(src);
+        }break;
+        case 12:{
+            adBilateralFilter biFilt;
+            biFilt.apply(src);
         }break;
     }
 }
@@ -159,7 +104,8 @@ void HandleData::customAugmenting(){
 
 void HandleData::saveAugmentedData(){
     for(int i = 0; i < data.size(); i++){
-        augData.resizeImage(data.at(i),32,32,false);
+        adResizeImage resImg(32,32,false);
+        resImg.apply(data.at(i));
         stringstream concat;
         concat << "./images/carro-" << i << ".jpg";
         imwrite(concat.str(),data.at(i));

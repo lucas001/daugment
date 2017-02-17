@@ -9,8 +9,10 @@ private:
     Vec3f unitaryChange;
     float maxIntensColor;
 
+    adProbabilityParams probParams;
+
 public:
-    adColorIntensification(){}
+    adColorIntensification();
     adColorIntensification(Vec3f unitaryChange, float maxIntensColor = 0.5);
 
     void apply(Mat& src);

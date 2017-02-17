@@ -8,28 +8,30 @@ class adTranslate : public adAugmentMethod{
 private:
     float transX;
     float transY;
-    int maxPercTrans;
+    float maxPercTrans;
     bool keepSize;
 
-    float percTrans;
-    bool randInit;
+    bool isRandInit;
+    float percX;
+    float percY;
+
+    adProbabilityParams probParams;
 
 public:
-    adTranslate(float transX = 0, float transY = 0, float percTrans = 1, int maxPercTrans = 30, bool keepSize = true);
+    adTranslate();
+    adTranslate(float transX, float transY, float maxPercTrans = 0.3, bool keepSize = true);
 
     void apply(Mat& src);
     void randomInit();
 
     float getTransX(){ return transX; }
     float getTransY(){ return transY; }
-    float getPercTrans(){ return percTrans; }
-    int getMaxPercTrans(){ return maxPercTrans; }
+    float getMaxPercTrans(){ return maxPercTrans; }
     bool getKeepSize() { return keepSize; }
 
     void setTransX(float transX);
     void setTransY(float transY);
-    void setPercTrans(float percTrans);
-    void setMaxPercTrans(int maxPercTrans);
+    void setMaxPercTrans(float maxPercTrans);
     void setKeepSize(bool keepSize);
 };
 

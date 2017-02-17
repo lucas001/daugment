@@ -12,9 +12,10 @@ private:
     float maxShear;
 
     adTranslate adTrans;
+    adProbabilityParams probParams;
 
 public:
-    adShearImage(){}
+    adShearImage();
     adShearImage(float shearX, float shearY, float maxShear = 0.2 );
 
     void apply(Mat& src);

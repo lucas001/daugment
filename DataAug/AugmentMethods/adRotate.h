@@ -9,8 +9,10 @@ private:
     int angle;
     int maxAngRot;
 
+    adProbabilityParams probParams;
+
 public:
-    adRotate(){};
+    adRotate();
     adRotate(int angle, int maxAngRot = 25);
 
     void apply(Mat& src);

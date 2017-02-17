@@ -10,8 +10,10 @@ private:
     float minNorm;
     int devNormalization;
 
+    adProbabilityParams probParams;
+
 public:
-    adNormalizeImage(){}
+    adNormalizeImage();
     adNormalizeImage(float maxNorm, float minNorm, int devNormalization = 40);
 
     void apply(Mat& src);

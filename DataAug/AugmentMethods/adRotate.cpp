@@ -5,6 +5,11 @@ adRotate::adRotate(int angle, int maxAngRot){
     this->maxAngRot = maxAngRot;
 }
 
+adRotate::adRotate():
+adRotate(0){
+    randomInit();
+}
+
 void adRotate::apply(Mat& src){
     Point2f src_center(src.cols/2.0f, src.rows/2.0f);
     Mat rot_mat = getRotationMatrix2D(src_center, angle, 1.0);
@@ -15,7 +20,7 @@ void adRotate::apply(Mat& src){
 }
 
 void adRotate::randomInit(){
-    this->angle = rand()%maxAngRot;
+    this->angle = probParams.uniformDistribution(-maxAngRot,maxAngRot);
 }
 
 void adRotate::setAngle(int angle){

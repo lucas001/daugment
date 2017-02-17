@@ -1,20 +1,26 @@
 #include "AugmentMethods/adTranslate.h"
     
-adTranslate::adTranslate(float transX, float transY, float percTrans, int maxPercTrans, bool keepSize){
+adTranslate::adTranslate(float transX, float transY, float maxPercTrans, bool keepSize){
     this->transX = transX;
     this->transY = transY;
-    this->percTrans = percTrans;
     this->maxPercTrans = maxPercTrans;
     this->keepSize = keepSize;
 
-    this->percTrans = 1;
-    this->randInit = false;
+    this->isRandInit = false;
+    this->percX = 0;
+    this->percY = 0;
+}
+
+adTranslate::adTranslate():
+adTranslate(0,0){
+    randomInit();
 }
 
 void adTranslate::apply(Mat& src){
 
-    transX = src.cols*percTrans;
-    transY = src.rows*percTrans;
+
+    transX = isRandInit ? src.cols*(percX) : transX;
+    transY = isRandInit ? src.rows*(percY) : transY;
 
     Mat out;
     src.copyTo(out);
@@ -36,23 +42,22 @@ void adTranslate::apply(Mat& src){
 }
 
 void adTranslate::randomInit(){
-    percTrans = (float)(rand()%maxPercTrans)/100.f;
-    randInit = true;
+    isRandInit = true;
+    percX = probParams.uniformDistribution(-maxPercTrans,maxPercTrans);
+    percY = probParams.uniformDistribution(-maxPercTrans,maxPercTrans);
 }
 
 void adTranslate::setTransX(float transX){
+    isRandInit = false;
     this->transX = transX;
 }
 
 void adTranslate::setTransY(float transY){
+    isRandInit = false;
     this->transY = transY;
 }
 
-void adTranslate::setPercTrans(float percTrans){
-    this->percTrans = percTrans;
-}
-
-void adTranslate::setMaxPercTrans(int maxPercTrans){
+void adTranslate::setMaxPercTrans(float maxPercTrans){
     this->maxPercTrans = maxPercTrans;
 }
 

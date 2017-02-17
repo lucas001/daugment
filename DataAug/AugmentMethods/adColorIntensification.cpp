@@ -5,6 +5,11 @@ adColorIntensification::adColorIntensification(Vec3f unitaryChange, float maxInt
     this->unitaryChange = unitaryChange;
 }
 
+adColorIntensification::adColorIntensification():
+adColorIntensification(Vec3f(0,0,0)){
+    randomInit();
+}
+
 void adColorIntensification::apply(Mat& src){
     if(src.channels() == 1){
         cout << "Gray image. Use contrast and brightness method instead." << endl;
@@ -27,7 +32,7 @@ void adColorIntensification::apply(Mat& src){
 void adColorIntensification::randomInit(){
     float unit[3];
     for(int i = 0; i < 3; i++){
-        unit[i] = (float)(rand()%(int)(maxIntensColor*100.f))/100.f;
+        unit[i] = probParams.uniformDistribution(0,maxIntensColor);
     }
     this->unitaryChange = Vec3f(unit[0],unit[1],unit[2]);
 }

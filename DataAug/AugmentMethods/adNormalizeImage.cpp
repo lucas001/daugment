@@ -6,6 +6,11 @@ adNormalizeImage::adNormalizeImage(float maxNorm, float minNorm, int devNormaliz
     this->devNormalization = devNormalization;
 }
 
+adNormalizeImage::adNormalizeImage():
+adNormalizeImage(0,0){
+    randomInit();
+}
+
 void adNormalizeImage::apply(Mat& src){
     Mat out = Mat::zeros(src.size(),src.type());
     
@@ -15,8 +20,8 @@ void adNormalizeImage::apply(Mat& src){
 }
 
 void adNormalizeImage::randomInit(){
-    this->minNorm = (float)(rand()%(255-devNormalization));
-    this->maxNorm = minNorm + devNormalization + (float)(rand()%(int)(minNorm + devNormalization));
+    this->minNorm = probParams.uniformDistribution(0,255-devNormalization);
+    this->maxNorm = minNorm + devNormalization + probParams.uniformDistribution(0,minNorm + devNormalization);
 }
 
 void adNormalizeImage::setMaxNorm(float maxNorm){

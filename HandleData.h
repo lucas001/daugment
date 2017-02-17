@@ -2,7 +2,6 @@
 #define HANDLE_DATA_H
 
 #include "adDataHeader.h"
-#include "AugmentData.h"
 
 #include "AugmentMethods/adColorIntensification.h"
 #include "AugmentMethods/adContBright.h"
@@ -17,29 +16,11 @@
 #include "AugmentMethods/adScaleImage.h"
 #include "AugmentMethods/adShearImage.h"
 #include "AugmentMethods/adTranslate.h"
+#include "AugmentMethods/adBilateralFilter.h"
 
 class HandleData{
 private:
-    AugmentData augData;
-
     vector<Mat> data;
-
-    float marginScale;
-    float maxShear;
-    float maxIntensColor;
-    int maxPercTrans;
-    int maxAngRot;
-    int maxNumKGauss;
-    int minNumKGauss;
-    int devScale;
-    int gaussMaxMean;
-    int gaussMaxStd;
-    int maxDevBrightness;
-    int maxContrast;
-    int marginContrast;
-    int marginDropout;
-    int devDropout;
-    int devNormalization;
 
     void randomAugmenting();
     void selectMethod(int index,Mat& src);
