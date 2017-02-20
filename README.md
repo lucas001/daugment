@@ -4,6 +4,6 @@ Under development.
 
 ##TODO
 
-1.Negative shear is cutting the image
-2.Test class
+1. Negative shear is cutting the image
+2. Test class
 
