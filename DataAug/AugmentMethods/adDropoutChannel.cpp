@@ -17,13 +17,13 @@ void adDropoutChannel::apply(Mat& src){
 
     int numPixelsDrop = src.cols*src.rows*perc;
     numPixelsDrop *= src.channels();
-    cout << numPixelsDrop << endl;
+    cout << "Pixels" << numPixelsDrop << endl;
 
     for(int i = 0; i < numPixelsDrop; i++){
         int column = probParams.uniformDistribution(0,src.cols);
         int row = probParams.uniformDistribution(0,src.rows);
         
-        int idCh = probParams.uniformDistribution(0,src.channels()-1);
+        int idCh = probParams.uniformDistribution(0,src.channels());
         src.at<Vec3b>(row,column)[idCh] = 0;
     }
 }

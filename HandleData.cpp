@@ -15,85 +15,84 @@ void HandleData::readSource(string path){
         data.push_back(im);
     }
 
-    int index = rand()%data.size();
-    
-    Mat src;
-    data.at(index).copyTo(src);
-    selectMethod(12,src);
-    imshow("SHOW",src);
-    imshow("SHOW 2",data.at(index));
-    waitKey(0);
+    randomAugmenting();
 }
 
 void HandleData::randomAugmenting(){
+    vector<adAugmentMethod*> listMethods;
+    vector<int> attachedMethods;
+    int numMethods = round(probParams.uniformDistribution(0,15));
+    for(int i = 0; i < numMethods; i++){
+        int idMethod = round(probParams.uniformDistribution(0,15));
+        if(!(find(attachedMethods.begin(), attachedMethods.end(), idMethod) != attachedMethods.end())){
+            listMethods.push_back(getMethod(idMethod));
+            attachedMethods.push_back(idMethod);
+        }else{
+            i--;
+        }
+    }
     
+    executeMethods(listMethods);
+    saveAugmentedData();
+}
+
+void HandleData::executeMethods(vector<adAugmentMethod*> listMethods){
     for(int i = 0; i < data.size(); i++){
-        vector<int> listAppliedTech;
-        int numberTransform = rand()%12;
-        for(int j = 0; j < numberTransform; j++){
-            
-        }
-        if (find(listAppliedTech.begin(), listAppliedTech.end(), numberTransform) != listAppliedTech.end()){
-
-        }
-        listAppliedTech.push_back(numberTransform);
-
+        int numberTransform = round(probParams.uniformDistribution(0,listMethods.size()));
+        listMethods.at(numberTransform)->apply(data.at(i));
+        cout << "TESTE " << numberTransform << endl;
     }
 }
 
-void HandleData::selectMethod(int index,Mat& src){
+adAugmentMethod* HandleData::getMethod(int index){
     switch(index){
         case 0:{
-            adGaussianBlur gaussBlur;
-            gaussBlur.apply(src);
+            return new adGaussianBlur();
         }break;
         case 1:{
-            adInvertImage invImg;
-            invImg.apply(src);
+            return new adInvertImage();
         }break;
         case 2:{
-            adScaleImage scImg;
-            scImg.apply(src);
+            return new adScaleImage();
         }break;
         case 3:{
-            adGaussianNoise gaussNs;
-            gaussNs.apply(src);
+            return new adGaussianNoise();
         }break;
         case 4:{
-            adDropoutChannel dropCh;
-            dropCh.apply(src);
+            return new adDropoutChannel();
         }break;
         case 5:{
-            adContBright coBr;
-            coBr.apply(src);
+            return new adContBright();
         }break;
         case 6:{
-            adGrayScale grSc;
-            grSc.apply(src);
+            return new adGrayScale();
         }break;
         case 7:{
-            adTranslate trans;
-            trans.apply(src);
+            return new adTranslate();
         }break;
         case 8:{
-            adRotate rotImg;
-            rotImg.apply(src);
+            return new adRotate();
         }break;
         case 9:{
-            adShearImage shImg;
-            shImg.apply(src);
+            return new adShearImage();
         }break;
         case 10:{
-            adColorIntensification clrItImg;
-            clrItImg.apply(src);
+            return new adColorIntensification();
         }break;
         case 11:{
-            adNormalizeImage normImg;
-            normImg.apply(src);
+            return new adNormalizeImage();
         }break;
         case 12:{
-            adBilateralFilter biFilt;
-            biFilt.apply(src);
+            return new adBilateralFilter();
+        }break;
+        case 13:{
+            return new adCannyEdge();
+        }break;
+        case 14:{
+            return new adFlipDimensions();
+        }break;
+        case 15:{
+            return new adInvertColors();
         }break;
     }
 }

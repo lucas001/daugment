@@ -1,20 +1,26 @@
 #include "AugmentMethods/adBilateralFilter.h"
     
-adBilateralFilter::adBilateralFilter(float sigmaDst, float sigmaClr, int devNormalization){
-    this->sigmaDst = 3;//sigmaDst;
-    this->sigmaClr = 500;//sigmaClr;
-    this->devNormalization = devNormalization;
+adBilateralFilter::adBilateralFilter(int kernels, float sigmaDst, float sigmaClr, int maxKernels, float minSigClr, float maxSigClr, float minSigDst, float maxSigDst){
+    this->kernels = kernels;
+    this->sigmaDst = sigmaDst;
+    this->sigmaClr = sigmaClr;
+    this->maxKernels = maxKernels;
+    this->minSigClr = minSigClr;
+    this->maxSigClr = maxSigClr;
+    this->minSigDst = minSigDst;
+    this->maxSigDst = maxSigDst;
 }
 
 adBilateralFilter::adBilateralFilter():
-adBilateralFilter(0,0){
+adBilateralFilter(0,0,0){
     randomInit();
 }
 
 void adBilateralFilter::apply(Mat& src){
     Mat out = Mat::zeros(src.size(),src.type());
     
-    for ( int i = 1; i  <  31; i = i + 2 ){ 
+    cout << kernels << " " << sigmaClr << " " << sigmaDst << endl;
+    for ( int i = 1; i  <  kernels; i = i + 2 ){ 
         bilateralFilter( src, out, i, sigmaClr, sigmaDst);
     }
 
@@ -22,8 +28,9 @@ void adBilateralFilter::apply(Mat& src){
 }
 
 void adBilateralFilter::randomInit(){
-    //this->minNorm = probParams.uniformDistribution(0,255-devNormalization);
-    //this->maxNorm = minNorm + devNormalization + probParams.uniformDistribution(0,minNorm + devNormalization);
+    this->sigmaDst =  probParams.uniformDistribution(minSigDst,maxSigDst);
+    this->sigmaClr =  probParams.uniformDistribution(minSigClr,maxSigClr);
+    this->kernels =  probParams.uniformDistribution(1,maxKernels);
 }
 
 void adBilateralFilter::setSigmaDst(float sigmaDst){
@@ -34,6 +41,26 @@ void adBilateralFilter::setSigmaClr(float sigmaClr){
     this->sigmaClr = sigmaClr;
 }
 
-void adBilateralFilter::setDevNormalization(int devNormalization){
-    this->devNormalization = devNormalization;
+void adBilateralFilter::setNumKernels(int kernels){
+    this->kernels = kernels;
+}
+
+void adBilateralFilter::setMaxKernels(int maxKernels){
+    this->maxKernels = maxKernels;
+}
+
+void adBilateralFilter::setMinSigClr(float minSigClr){
+    this->minSigClr = minSigClr;
+}
+
+void adBilateralFilter::setMaxSigClr(float maxSigClr){
+    this->maxSigClr = maxSigClr;
+}
+
+void adBilateralFilter::setMinSigDst(float minSigDst){
+    this->minSigDst = minSigDst;
+}
+
+void adBilateralFilter::setMaxSigDst(float maxSigDst){
+    this->maxSigDst = maxSigDst;
 }

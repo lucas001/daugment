@@ -34,8 +34,6 @@ void adShearImage::apply(Mat& src){
     M.at<float>(1,1) = 1;
     M.at<float>(1,2) = 0;
 
-    cout << maxXOffset << endl;
-    cout << maxYOffset << endl;
     if(shearX < 0){
         adTrans.setTransX(maxXOffset);
         adTrans.setKeepSize(true);

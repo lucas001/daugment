@@ -17,13 +17,20 @@
 #include "AugmentMethods/adShearImage.h"
 #include "AugmentMethods/adTranslate.h"
 #include "AugmentMethods/adBilateralFilter.h"
+#include "AugmentMethods/adCannyEdge.h"
+#include "AugmentMethods/adFlipDimensions.h"
+#include "AugmentMethods/adInvertColors.h"
+#include "adProbabilityParams.h"
 
 class HandleData{
 private:
     vector<Mat> data;
 
+    adProbabilityParams probParams;
+
     void randomAugmenting();
-    void selectMethod(int index,Mat& src);
+    void executeMethods(vector<adAugmentMethod*> index);
+    adAugmentMethod* getMethod(int index);
     void customAugmenting();
     void saveAugmentedData();
 public:

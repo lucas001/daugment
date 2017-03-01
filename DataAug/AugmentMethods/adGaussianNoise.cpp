@@ -33,7 +33,7 @@ void adGaussianNoise::apply(Mat& src){
     for(int i = 0; i < numIt; i++){
         noise = Mat::zeros(src.size(), CV_8UC1);
         randn(noise,meanSc,stdDevSc);
-        int numCh = probParams.uniformDistribution(0, src.channels()-1);
+        int numCh = probParams.uniformDistribution(0, src.channels());
         chSrc[numCh] += noise;
     }
 

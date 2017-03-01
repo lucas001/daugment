@@ -15,7 +15,7 @@ void adGrayScale::apply(Mat& src){
     Mat out = Mat::zeros(src.size(),CV_8UC1);
     cvtColor(src, out, CV_BGR2GRAY);
 
-    cout << scale*255 << endl;
+    cout << "Scale: " << scale*255 << endl;
     out = out+scale*255;
 
     out.copyTo(src);
