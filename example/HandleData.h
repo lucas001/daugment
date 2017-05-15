@@ -1,6 +1,6 @@
 #ifndef HANDLE_DATA_H
 #define HANDLE_DATA_H
-hahahah
+
 #include "adDataHeader.h"
 
 #include "AugmentMethods/adColorIntensification.h"
