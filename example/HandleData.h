@@ -34,7 +34,7 @@ private:
     void customAugmenting();
     void saveAugmentedData();
 public:
-    HandleData();
+    HandleData(string path);
     void readSource(string path);
 };
 

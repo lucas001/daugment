@@ -1,10 +1,11 @@
 #include "HandleData.h"
 
-HandleData::HandleData(){
-    readSource("./");
+HandleData::HandleData(string path){
+    readSource(path);
 }
 
 void HandleData::readSource(string path){
+
     String pathTo(path);
     vector<String> fn;
     glob(pathTo,fn,true); // recurse
@@ -31,8 +32,9 @@ void HandleData::randomAugmenting(){
             i--;
         }
     }
-    
+
     executeMethods(listMethods);
+    
     saveAugmentedData();
 }
 
@@ -40,7 +42,6 @@ void HandleData::executeMethods(vector<adAugmentMethod*> listMethods){
     for(int i = 0; i < data.size(); i++){
         int numberTransform = round(probParams.uniformDistribution(0,listMethods.size()));
         listMethods.at(numberTransform)->apply(data.at(i));
-        cout << "TESTE " << numberTransform << endl;
     }
 }
 
@@ -97,16 +98,12 @@ adAugmentMethod* HandleData::getMethod(int index){
     }
 }
 
-void HandleData::customAugmenting(){
-    
-}
-
 void HandleData::saveAugmentedData(){
     for(int i = 0; i < data.size(); i++){
-        adResizeImage resImg(32,32,false);
-        resImg.apply(data.at(i));
+        //adResizeImage resImg(180,130,false);
+        //resImg.apply(data.at(i));
         stringstream concat;
-        concat << "./images/carro-" << i << ".jpg";
+        concat << "./onca-" << i << ".jpg";
         imwrite(concat.str(),data.at(i));
     }
 }
