@@ -26,3 +26,7 @@ void adRotate::randomInit(){
 void adRotate::setAngle(int angle){
     this->angle = angle;
 }
+
+void adRotate::setMaxAngle(int maxAngle){
+    this->maxAngRot = maxAngle;
+}

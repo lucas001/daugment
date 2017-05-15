@@ -19,7 +19,9 @@ public:
     void randomInit();
 
     int getAngle(){ return angle; };
-
+    int getMaxAngle(){ return maxAngRot; }
+    
+    void setMaxAngle(int maxAngle);
     void setAngle(int angle);
 };
 
